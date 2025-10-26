@@ -1,0 +1,19 @@
+# Python文件
+*.py
+*.pyc
+__pycache__
+
+# Excel文件
+*.xls
+*.xlsx
+
+# 其他不需要的文件
+verify_data.py
+generate_report.py
+gen_charts.py
+生成*.py
+
+# 临时文件
+*.tmp
+*.log
+
