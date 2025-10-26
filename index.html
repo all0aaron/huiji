@@ -218,9 +218,41 @@
                 width: 100%;
             }
         }
+        
+        /* 返回顶部按钮 */
+        .back-to-top {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s;
+            opacity: 0;
+            visibility: hidden;
+            z-index: 1000;
+        }
+        
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
     </style>
 </head>
 <body>
+    <button class="back-to-top" onclick="scrollToTop()">↑</button>
+    
     <div class="main-wrapper">
         <!-- 主内容区 -->
         <div class="container">
@@ -230,6 +262,7 @@
             <div style="margin-top: 25px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
                 <a href="faq.html" style="padding: 12px 25px; background: rgba(255,255,255,0.2); color: white; text-decoration: none; border-radius: 25px; border: 2px solid white; transition: all 0.3s; font-weight: bold;">❓ 常见问题解答</a>
                 <a href="data-details.html" style="padding: 12px 25px; background: rgba(255,255,255,0.2); color: white; text-decoration: none; border-radius: 25px; border: 2px solid white; transition: all 0.3s; font-weight: bold;">📊 数据详细说明</a>
+                <a href="specific-questions.html" style="padding: 12px 25px; background: rgba(255,255,255,0.2); color: white; text-decoration: none; border-radius: 25px; border: 2px solid white; transition: all 0.3s; font-weight: bold;">📐 特定问题说明</a>
                 <a href="love.html" style="padding: 12px 25px; background: rgba(255,255,255,0.2); color: white; text-decoration: none; border-radius: 25px; border: 2px solid white; transition: all 0.3s; font-weight: bold;">💕 特别的话</a>
             </div>
         </div>
@@ -722,5 +755,24 @@
             </ul>
         </nav>
     </div>
+    
+    <script>
+        // 返回顶部功能
+        window.onscroll = function() {
+            const btn = document.querySelector('.back-to-top');
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                btn.classList.add('show');
+            } else {
+                btn.classList.remove('show');
+            }
+        };
+        
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+    </script>
 </body>
 </html>

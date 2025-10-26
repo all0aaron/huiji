@@ -166,14 +166,76 @@
                 font-size: 2em;
             }
         }
+        
+        /* 导航按钮 */
+        .nav-buttons {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            border: 2px solid white;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+        
+        .nav-btn:hover {
+            background: white;
+            color: #28a745;
+        }
+        
+        /* 返回顶部按钮 */
+        .back-to-top {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
+            transition: all 0.3s;
+            opacity: 0;
+            visibility: hidden;
+            z-index: 1000;
+        }
+        
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.6);
+        }
     </style>
 </head>
 <body>
+    <button class="back-to-top" onclick="scrollToTop()">↑</button>
+    
     <div class="container">
         <div class="header">
             <h1>📊 数据详细说明</h1>
             <p>答辩必看！所有数据来源和计算公式都在这里</p>
-            <a href="index.html" class="back-btn">← 返回主页</a>
+            <div class="nav-buttons">
+                <a href="index.html" class="nav-btn">📄 主页</a>
+                <a href="faq.html" class="nav-btn">❓ 常见问题</a>
+                <a href="specific-questions.html" class="nav-btn">📐 特定问题</a>
+                <a href="love.html" class="nav-btn">💕 特别的话</a>
+            </div>
         </div>
         
         <div class="content">
@@ -559,6 +621,25 @@
             </div>
         </div>
     </div>
+    
+    <script>
+        // 返回顶部功能
+        window.onscroll = function() {
+            const btn = document.querySelector('.back-to-top');
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                btn.classList.add('show');
+            } else {
+                btn.classList.remove('show');
+            }
+        };
+        
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+    </script>
 </body>
 </html>
 

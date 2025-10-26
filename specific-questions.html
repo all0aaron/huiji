@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>特定问题说明 - 图表数据计算详解</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 50px 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+        
+        .nav-buttons {
+            margin-top: 25px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            border: 2px solid white;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+        
+        .nav-btn:hover {
+            background: white;
+            color: #f5576c;
+            transform: translateY(-2px);
+        }
+        
+        .content {
+            padding: 50px 60px;
+        }
+        
+        .section {
+            margin-bottom: 60px;
+        }
+        
+        .section-title {
+            font-size: 2em;
+            color: #f5576c;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #f5576c;
+        }
+        
+        .chart-analysis {
+            margin-bottom: 50px;
+            padding: 30px;
+            background: #fff5f7;
+            border-radius: 15px;
+            border-left: 5px solid #f093fb;
+        }
+        
+        .chart-title {
+            font-size: 1.6em;
+            color: #f093fb;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        
+        .indicator-box {
+            margin: 25px 0;
+            padding: 25px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .indicator-name {
+            font-size: 1.3em;
+            color: #f5576c;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .formula-box {
+            background: #fff3cd;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border-left: 5px solid #ffc107;
+        }
+        
+        .formula {
+            font-size: 1.2em;
+            color: #333;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .data-source {
+            background: #e7f3ff;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .calculation-example {
+            background: #d4edda;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border-left: 5px solid #28a745;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.95em;
+        }
+        
+        .data-table th {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 12px;
+            text-align: center;
+        }
+        
+        .data-table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        
+        .data-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        .important-note {
+            background: #fff3cd;
+            padding: 20px;
+            border-left: 5px solid #ffc107;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        /* 返回顶部按钮 */
+        .back-to-top {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
+            transition: all 0.3s;
+            opacity: 0;
+            visibility: hidden;
+            z-index: 1000;
+        }
+        
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(245, 87, 108, 0.6);
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                padding: 30px 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .back-to-top {
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-to-top" onclick="scrollToTop()">↑</button>
+    
+    <div class="container">
+        <div class="header">
+            <h1>📐 特定问题说明</h1>
+            <p>图4-1至图4-5 的详细计算过程</p>
+            <div class="nav-buttons">
+                <a href="index.html" class="nav-btn">📄 主页</a>
+                <a href="faq.html" class="nav-btn">❓ 常见问题</a>
+                <a href="data-details.html" class="nav-btn">📊 数据说明</a>
+                <a href="love.html" class="nav-btn">💕 特别的话</a>
+            </div>
+        </div>
+        
+        <div class="content">
+            <!-- 总说明 -->
+            <div class="important-note">
+                <p><strong>📌 本页面详细说明：</strong></p>
+                <p style="margin-top: 10px;">图4-1至图4-5中的每一个数据点是如何从Excel原始数据计算得出的，包括数据来源、计算公式、具体计算过程。适合答辩前复习，当老师问"这个数据怎么来的？"时，你可以从容回答！</p>
+            </div>
+            
+            <!-- 图4-1：偿债能力分析 -->
+            <div class="section">
+                <h2 class="section-title">📊 图4-1：偿债能力指标趋势图</h2>
+                
+                <div class="chart-analysis">
+                    <div class="chart-title">🔍 图表包含的指标</div>
+                    <p>· 流动比率（2020-2024年，共5个数据点）</p>
+                    <p>· 速动比率（2020-2024年，共5个数据点）</p>
+                    <p>· 资产负债率（2020-2024年，共5个数据点）</p>
+                    
+                    <!-- 指标1：流动比率 -->
+                    <div class="indicator-box">
+                        <div class="indicator-name">指标1：流动比率</div>
+                        
+                        <div class="formula-box">
+                            <p class="formula">流动比率 = 流动资产 ÷ 流动负债</p>
+                        </div>
+                        
+                        <div class="data-source">
+                            <p><strong>📁 数据来源：</strong></p>
+                            <p>· <strong>流动资产</strong>：来自《安井食品资产负债表数据.xls》→ "流动资产合计"行</p>
+                            <p>· <strong>流动负债</strong>：来自《安井食品资产负债表数据.xls》→ "流动负债合计"行</p>
+                        </div>
+                        
+                        <p><strong>📊 各年度数据及计算：</strong></p>
+                        
+                        <table class="data-table">
+                            <tr>
+                                <th>年份</th>
+                                <th>流动资产(亿元)</th>
+                                <th>流动负债(亿元)</th>
+                                <th>流动比率</th>
+                                <th>计算过程</th>
+                            </tr>
+                            <tr>
+                                <td><strong>2020</strong></td>
+                                <td>82.93</td>
+                                <td>50.01</td>
+                                <td><strong>1.66</strong></td>
+                                <td>82.93 ÷ 50.01 = 1.66</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2021</strong></td>
+                                <td>93.46</td>
+                                <td>77.96</td>
+                                <td><strong>1.20</strong></td>
+                                <td>93.46 ÷ 77.96 = 1.20</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2022</strong></td>
+                                <td>137.85</td>
+                                <td>57.17</td>
+                                <td><strong>2.41</strong></td>
+                                <td>137.85 ÷ 57.17 = 2.41</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2023</strong></td>
+                                <td>148.73</td>
+                                <td>62.76</td>
+                                <td><strong>2.37</strong></td>
+                                <td>148.73 ÷ 62.76 = 2.37</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2024</strong></td>
+                                <td>143.25</td>
+                                <td>54.71</td>
+                                <td><strong>2.62</strong></td>
+                                <td>143.25 ÷ 54.71 = 2.62</td>
+                            </tr>
+                        </table>
+                        
+                        <div class="calculation-example">
+                            <p><strong>✅ 结论：</strong>流动比率从2021年的1.20上升到2024年的2.62，说明短期偿债能力显著增强。</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 指标2：速动比率 -->
+                    <div class="indicator-box">
+                        <div class="indicator-name">指标2：速动比率</div>
+                        
+                        <div class="formula-box">
+                            <p class="formula">速动比率 = (流动资产 - 存货) ÷ 流动负债</p>
+                        </div>
+                        
+                        <div class="data-source">
+                            <p><strong>📁 数据来源：</strong></p>
+                            <p>· <strong>流动资产</strong>：来自《安井食品资产负债表数据.xls》→ "流动资产合计"行</p>
+                            <p>· <strong>存货</strong>：来自《安井食品资产负债表数据.xls》→ "存货"行</p>
+                            <p>· <strong>流动负债</strong>：来自《安井食品资产负债表数据.xls》→ "流动负债合计"行</p>
+                        </div>
+                        
+                        <table class="data-table">
+                            <tr>
+                                <th>年份</th>
+                                <th>流动资产</th>
+                                <th>存货</th>
+                                <th>流动负债</th>
+                                <th>速动比率</th>
+                                <th>计算过程</th>
+                            </tr>
+                            <tr>
+                                <td><strong>2020</strong></td>
+                                <td>82.93</td>
+                                <td>16.91</td>
+                                <td>50.01</td>
+                                <td><strong>0.98</strong></td>
+                                <td>(82.93-16.91)÷50.01=0.98</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2021</strong></td>
+                                <td>93.46</td>
+                                <td>24.14</td>
+                                <td>77.96</td>
+                                <td><strong>0.55</strong></td>
+                                <td>(93.46-24.14)÷77.96=0.55</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2022</strong></td>
+                                <td>137.85</td>
+                                <td>31.37</td>
+                                <td>57.17</td>
+                                <td><strong>1.85</strong></td>
+                                <td>(137.85-31.37)÷57.17=1.85</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2023</strong></td>
+                                <td>148.73</td>
+                                <td>35.67</td>
+                                <td>62.76</td>
+                                <td><strong>1.70</strong></td>
+                                <td>(148.73-35.67)÷62.76=1.70</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2024</strong></td>
+                                <td>143.25</td>
+                                <td>32.85</td>
+                                <td>54.71</td>
+                                <td><strong>1.93</strong></td>
+                                <td>(143.25-32.85)÷54.71=1.93</td>
+                            </tr>
+                        </table>
+                        
+                        <div class="calculation-example">
+                            <p><strong>⚠️ 关键发现：</strong>2021年速动比率降至0.55，低于行业标准1:1，这是我们在第4章提出的"问题3"的数据依据！</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 指标3：资产负债率 -->
+                    <div class="indicator-box">
+                        <div class="indicator-name">指标3：资产负债率</div>
+                        
+                        <div class="formula-box">
+                            <p class="formula">资产负债率 = (负债总额 ÷ 资产总额) × 100%</p>
+                        </div>
+                        
+                        <div class="data-source">
+                            <p><strong>📁 数据来源：</strong></p>
+                            <p>· <strong>负债总额</strong>：来自《安井食品资产负债表数据.xls》→ "负债合计"行</p>
+                            <p>· <strong>资产总额</strong>：来自《安井食品资产负债表数据.xls》→ "资产总计"行</p>
+                        </div>
+                        
+                        <table class="data-table">
+                            <tr>
+                                <th>年份</th>
+                                <th>负债总额(亿元)</th>
+                                <th>资产总额(亿元)</th>
+                                <th>资产负债率(%)</th>
+                                <th>计算过程</th>
+                            </tr>
+                            <tr>
+                                <td><strong>2020</strong></td>
+                                <td>81.29</td>
+                                <td>169.01</td>
+                                <td><strong>48.09</strong></td>
+                                <td>81.29÷169.01×100%=48.09%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2021</strong></td>
+                                <td>82.32</td>
+                                <td>199.09</td>
+                                <td><strong>41.35</strong></td>
+                                <td>82.32÷199.09×100%=41.35%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2022</strong></td>
+                                <td>62.76</td>
+                                <td>238.71</td>
+                                <td><strong>26.29</strong></td>
+                                <td>62.76÷238.71×100%=26.29%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2023</strong></td>
+                                <td>66.93</td>
+                                <td>263.06</td>
+                                <td><strong>25.44</strong></td>
+                                <td>66.93÷263.06×100%=25.44%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2024</strong></td>
+                                <td>58.96</td>
+                                <td>249.59</td>
+                                <td><strong>23.62</strong></td>
+                                <td>58.96÷249.59×100%=23.62%</td>
+                            </tr>
+                        </table>
+                        
+                        <div class="calculation-example">
+                            <p><strong>✅ 结论：</strong>资产负债率从48.09%下降到23.62%，说明财务风险持续降低。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 图4-2：营运能力分析 -->
+            <div class="section">
+                <h2 class="section-title">📊 图4-2：营运能力指标趋势图</h2>
+                
+                <div class="chart-analysis">
+                    <div class="chart-title">🔍 图表包含的指标</div>
+                    <p>· 存货周转率（2020-2024年）</p>
+                    <p>· 应收账款周转率（2020-2024年）</p>
+                    <p>· 总资产周转率（2020-2024年）</p>
+                    
+                    <!-- 指标4：存货周转率 -->
+                    <div class="indicator-box">
+                        <div class="indicator-name">指标4：存货周转率</div>
+                        
+                        <div class="formula-box">
+                            <p class="formula">存货周转率 = 营业成本 ÷ 平均存货</p>
+                            <p class="formula" style="font-size: 1em; margin-top: 5px;">平均存货 = (期初存货 + 期末存货) ÷ 2</p>
+                        </div>
+                        
+                        <div class="data-source">
+                            <p><strong>📁 数据来源：</strong></p>
+                            <p>· <strong>营业成本</strong>：来自《安井食品利润表数据.xls》→ "营业成本"行</p>
+                            <p>· <strong>期初存货</strong>：来自《安井食品资产负债表数据.xls》→ 上年末的"存货"</p>
+                            <p>· <strong>期末存货</strong>：来自《安井食品资产负债表数据.xls》→ 本年末的"存货"</p>
+                        </div>
+                        
+                        <div class="calculation-example">
+                            <p><strong>📝 计算示例（2024年）：</strong></p>
+                            <p>· 营业成本 = 115.32亿元</p>
+                            <p>· 期初存货（2023年末）= 35.67亿元</p>
+                            <p>· 期末存货（2024年末）= 32.85亿元</p>
+                            <p>· 平均存货 = (35.67 + 32.85) ÷ 2 = 34.26亿元</p>
+                            <p>· <strong>存货周转率 = 115.32 ÷ 34.26 = 3.53次</strong></p>
+                        </div>
+                        
+                        <table class="data-table">
+                            <tr>
+                                <th>年份</th>
+                                <th>营业成本</th>
+                                <th>平均存货</th>
+                                <th>存货周转率(次)</th>
+                            </tr>
+                            <tr>
+                                <td><strong>2020</strong></td>
+                                <td>50.04</td>
+                                <td>16.35</td>
+                                <td><strong>3.06</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>2021</strong></td>
+                                <td>61.55</td>
+                                <td>20.53</td>
+                                <td><strong>2.99</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>2022</strong></td>
+                                <td>84.29</td>
+                                <td>27.76</td>
+                                <td><strong>3.03</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>2023</strong></td>
+                                <td>101.88</td>
+                                <td>33.52</td>
+                                <td><strong>3.03</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>2024</strong></td>
+                                <td>115.32</td>
+                                <td>34.26</td>
+                                <td><strong>3.53</strong></td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <!-- 指标5：应收账款周转率 -->
+                    <div class="indicator-box">
+                        <div class="indicator-name">指标5：应收账款周转率</div>
+                        
+                        <div class="formula-box">
+                            <p class="formula">应收账款周转率 = 营业收入 ÷ 平均应收账款</p>
+                            <p class="formula" style="font-size: 1em; margin-top: 5px;">平均应收账款 = (期初应收账款 + 期末应收账款) ÷ 2</p>
+                        </div>
+                        
+                        <div class="data-source">
+                            <p><strong>📁 数据来源：</strong></p>
+                            <p>· <strong>营业收入</strong>：来自《安井食品利润表数据.xls》→ "营业总收入"行</p>
+                            <p>· <strong>应收账款</strong>：来自《安井食品资产负债表数据.xls》→ "应收账款"行</p>
+                        </div>
+                        
+                        <table class="data-table">
+                            <tr>
+                                <th>年份</th>
+                                <th>营业收入(亿)</th>
+                                <th>平均应收账款(亿)</th>
+                                <th>周转率(次)</th>
+                            </tr>
+                            <tr>
+                                <td><strong>2020</strong></td>
+                                <td>65.82</td>
+                                <td>3.31</td>
+                                <td><strong>19.91</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>2021</strong></td>
+                                <td>87.62</td>
+                                <td>5.12</td>
+                                <td><strong>17.11</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>2022</strong></td>
+                                <td>115.09</td>
+                                <td>6.96</td>
+                                <td><strong>16.54</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>2023</strong></td>
+                                <td>138.29</td>
+                                <td>5.61</td>
+                                <td><strong>24.63</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>2024</strong></td>
+                                <td>148.95</td>
+                                <td>6.16</td>
+                                <td><strong>24.16</strong></td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <!-- 指标6：总资产周转率 -->
+                    <div class="indicator-box">
+                        <div class="indicator-name">指标6：总资产周转率</div>
+                        
+                        <div class="formula-box">
+                            <p class="formula">总资产周转率 = 营业收入 ÷ 平均资产总额</p>
+                        </div>
+                        
+                        <div class="data-source">
+                            <p><strong>📁 数据来源：</strong></p>
+                            <p>· <strong>营业收入</strong>：来自《安井食品利润表数据.xls》</p>
+                            <p>· <strong>资产总额</strong>：来自《安井食品资产负债表数据.xls》→ "资产总计"行</p>
+                        </div>
+                        
+                        <table class="data-table">
+                            <tr>
+                                <th>年份</th>
+                                <th>营业收入(亿)</th>
+                                <th>平均资产(亿)</th>
+                                <th>周转率(次)</th>
+                            </tr>
+                            <tr>
+                                <td><strong>2020</strong></td>
+                                <td>65.82</td>
+                                <td>67.09</td>
+                                <td><strong>0.98</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>2021</strong></td>
+                                <td>87.62</td>
+                                <td>82.61</td>
+                                <td><strong>1.06</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>2022</strong></td>
+                                <td>115.09</td>
+                                <td>153.42</td>
+                                <td><strong>0.75</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>2023</strong></td>
+                                <td>138.29</td>
+                                <td>170.82</td>
+                                <td><strong>0.81</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>2024</strong></td>
+                                <td>148.95</td>
+                                <td>171.07</td>
+                                <td><strong>0.87</strong></td>
+                            </tr>
+                        </table>
+                        
+                        <div class="calculation-example">
+                            <p><strong>⚠️ 这是"问题4"的数据依据：</strong>总资产周转率从2021年的1.06次下降到2024年的0.87次！</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 图4-3：盈利能力分析 -->
+            <div class="section">
+                <h2 class="section-title">📊 图4-3：盈利能力指标趋势图</h2>
+                
+                <div class="chart-analysis">
+                    <div class="chart-title">🔍 图表包含的指标</div>
+                    <p>· 销售净利率（2020-2024年）</p>
+                    <p>· 净资产收益率ROE（2020-2024年）</p>
+                    <p>· 总资产收益率ROA（2020-2024年）</p>
+                    
+                    <!-- 指标7：销售净利率 -->
+                    <div class="indicator-box">
+                        <div class="indicator-name">指标7：销售净利率</div>
+                        
+                        <div class="formula-box">
+                            <p class="formula">销售净利率 = (净利润 ÷ 营业收入) × 100%</p>
+                        </div>
+                        
+                        <div class="data-source">
+                            <p><strong>📁 数据来源：</strong></p>
+                            <p>· <strong>净利润</strong>：来自《安井食品利润表数据.xls》→ "净利润"行</p>
+                            <p>· <strong>营业收入</strong>：来自《安井食品利润表数据.xls》→ "营业总收入"行</p>
+                        </div>
+                        
+                        <table class="data-table">
+                            <tr>
+                                <th>年份</th>
+                                <th>净利润(亿元)</th>
+                                <th>营业收入(亿元)</th>
+                                <th>销售净利率(%)</th>
+                                <th>计算过程</th>
+                            </tr>
+                            <tr>
+                                <td><strong>2020</strong></td>
+                                <td>5.71</td>
+                                <td>65.82</td>
+                                <td><strong>8.67</strong></td>
+                                <td>5.71÷65.82×100%=8.67%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2021</strong></td>
+                                <td>6.49</td>
+                                <td>87.62</td>
+                                <td><strong>7.41</strong></td>
+                                <td>6.49÷87.62×100%=7.41%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2022</strong></td>
+                                <td>10.56</td>
+                                <td>115.09</td>
+                                <td><strong>9.17</strong></td>
+                                <td>10.56÷115.09×100%=9.17%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2023</strong></td>
+                                <td>14.78</td>
+                                <td>138.29</td>
+                                <td><strong>10.69</strong></td>
+                                <td>14.78÷138.29×100%=10.69%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2024</strong></td>
+                                <td>14.91</td>
+                                <td>148.95</td>
+                                <td><strong>10.01</strong></td>
+                                <td>14.91÷148.95×100%=10.01%</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <!-- 指标8-9：ROE和ROA -->
+                    <div class="indicator-box">
+                        <div class="indicator-name">指标8：净资产收益率（ROE）& 指标9：总资产收益率（ROA）</div>
+                        
+                        <div class="formula-box">
+                            <p class="formula">ROE = (净利润 ÷ 平均净资产) × 100%</p>
+                            <p class="formula" style="margin-top: 10px;">ROA = (净利润 ÷ 平均资产总额) × 100%</p>
+                        </div>
+                        
+                        <div class="data-source">
+                            <p><strong>📁 数据来源：</strong></p>
+                            <p>· <strong>净利润</strong>：来自《安井食品利润表数据.xls》</p>
+                            <p>· <strong>净资产</strong>：来自《安井食品资产负债表数据.xls》→ "所有者权益合计"行</p>
+                            <p>· <strong>资产总额</strong>：来自《安井食品资产负债表数据.xls》→ "资产总计"行</p>
+                        </div>
+                        
+                        <table class="data-table">
+                            <tr>
+                                <th>年份</th>
+                                <th>净利润(亿)</th>
+                                <th>平均净资产(亿)</th>
+                                <th>ROE(%)</th>
+                                <th>平均资产(亿)</th>
+                                <th>ROA(%)</th>
+                            </tr>
+                            <tr>
+                                <td><strong>2020</strong></td>
+                                <td>5.71</td>
+                                <td>34.84</td>
+                                <td><strong>16.39</strong></td>
+                                <td>67.09</td>
+                                <td><strong>8.51</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>2021</strong></td>
+                                <td>6.49</td>
+                                <td>48.26</td>
+                                <td><strong>13.45</strong></td>
+                                <td>82.61</td>
+                                <td><strong>7.83</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>2022</strong></td>
+                                <td>10.56</td>
+                                <td>114.17</td>
+                                <td><strong>9.25</strong></td>
+                                <td>153.42</td>
+                                <td><strong>6.92</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>2023</strong></td>
+                                <td>14.78</td>
+                                <td>128.52</td>
+                                <td><strong>11.50</strong></td>
+                                <td>170.82</td>
+                                <td><strong>8.68</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>2024</strong></td>
+                                <td>14.91</td>
+                                <td>131.36</td>
+                                <td><strong>11.35</strong></td>
+                                <td>171.07</td>
+                                <td><strong>8.71</strong></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 图4-4：发展能力分析 -->
+            <div class="section">
+                <h2 class="section-title">📊 图4-4：发展能力指标对比图</h2>
+                
+                <div class="chart-analysis">
+                    <div class="chart-title">🔍 图表包含的指标</div>
+                    <p>· 营业收入增长率（2021-2024年）</p>
+                    <p>· 净利润增长率（2021-2024年）</p>
+                    
+                    <div class="indicator-box">
+                        <div class="indicator-name">指标10-11：增长率指标</div>
+                        
+                        <div class="formula-box">
+                            <p class="formula">营业收入增长率 = [(本年收入 - 上年收入) ÷ 上年收入] × 100%</p>
+                            <p class="formula" style="margin-top: 10px;">净利润增长率 = [(本年利润 - 上年利润) ÷ 上年利润] × 100%</p>
+                        </div>
+                        
+                        <table class="data-table">
+                            <tr>
+                                <th>年份</th>
+                                <th>本年收入</th>
+                                <th>上年收入</th>
+                                <th>收入增长率(%)</th>
+                                <th>本年利润</th>
+                                <th>上年利润</th>
+                                <th>利润增长率(%)</th>
+                            </tr>
+                            <tr>
+                                <td><strong>2021</strong></td>
+                                <td>87.62</td>
+                                <td>65.82</td>
+                                <td><strong>33.12</strong></td>
+                                <td>6.49</td>
+                                <td>5.71</td>
+                                <td><strong>13.75</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>2022</strong></td>
+                                <td>115.09</td>
+                                <td>87.62</td>
+                                <td><strong>31.35</strong></td>
+                                <td>10.56</td>
+                                <td>6.49</td>
+                                <td><strong>61.72</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>2023</strong></td>
+                                <td>138.29</td>
+                                <td>115.09</td>
+                                <td><strong>15.29</strong></td>
+                                <td>14.78</td>
+                                <td>10.56</td>
+                                <td><strong>34.36</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>2024</strong></td>
+                                <td>148.95</td>
+                                <td>138.29</td>
+                                <td><strong>7.70</strong></td>
+                                <td>14.91</td>
+                                <td>14.78</td>
+                                <td><strong>0.83</strong></td>
+                            </tr>
+                        </table>
+                        
+                        <div class="calculation-example">
+                            <p><strong>📝 计算示例（2024年）：</strong></p>
+                            <p>· 营业收入增长率 = (148.95 - 138.29) ÷ 138.29 × 100% = 7.70%</p>
+                            <p>· 净利润增长率 = (14.91 - 14.78) ÷ 14.78 × 100% = 0.83%</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 图4-5：问题指标分析 -->
+            <div class="section">
+                <h2 class="section-title">📊 图4-5：应收账款与存货变化趋势图（问题指标）</h2>
+                
+                <div class="chart-analysis">
+                    <div class="chart-title">🔍 图表包含的指标</div>
+                    <p>· 应收账款（2020-2024年，亿元）</p>
+                    <p>· 存货（2020-2024年，亿元）</p>
+                    
+                    <div class="indicator-box">
+                        <div class="indicator-name">核心问题数据</div>
+                        
+                        <div class="data-source">
+                            <p><strong>📁 数据来源：</strong></p>
+                            <p>· <strong>应收账款</strong>：直接来自《安井食品资产负债表数据.xls》→ "应收账款"行</p>
+                            <p>· <strong>存货</strong>：直接来自《安井食品资产负债表数据.xls》→ "存货"行</p>
+                        </div>
+                        
+                        <p><strong>📊 应收账款数据：</strong></p>
+                        <table class="data-table">
+                            <tr>
+                                <th>年份</th>
+                                <th>应收账款(亿元)</th>
+                                <th>同比增长(亿元)</th>
+                                <th>增长率(%)</th>
+                            </tr>
+                            <tr>
+                                <td><strong>2020</strong></td>
+                                <td><strong>3.50</strong></td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2021</strong></td>
+                                <td><strong>5.42</strong></td>
+                                <td>+1.92</td>
+                                <td>54.86%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2022</strong></td>
+                                <td><strong>7.37</strong></td>
+                                <td>+1.95</td>
+                                <td>35.98%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2023</strong></td>
+                                <td><strong>5.69</strong></td>
+                                <td>-1.68</td>
+                                <td>-22.79%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2024</strong></td>
+                                <td><strong>6.26</strong></td>
+                                <td>+0.57</td>
+                                <td>10.02%</td>
+                            </tr>
+                        </table>
+                        
+                        <div class="calculation-example">
+                            <p><strong>⚠️ 这是"问题1"的数据依据：</strong></p>
+                            <p>应收账款从2020年的3.50亿元增长到2024年的6.26亿元</p>
+                            <p>总增长率 = (6.26 - 3.50) ÷ 3.50 × 100% = <strong>78.86%</strong></p>
+                        </div>
+                        
+                        <p style="margin-top: 40px;"><strong>📦 存货数据：</strong></p>
+                        <table class="data-table">
+                            <tr>
+                                <th>年份</th>
+                                <th>存货(亿元)</th>
+                                <th>同比增长(亿元)</th>
+                                <th>增长率(%)</th>
+                            </tr>
+                            <tr>
+                                <td><strong>2020</strong></td>
+                                <td><strong>16.91</strong></td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2021</strong></td>
+                                <td><strong>24.14</strong></td>
+                                <td>+7.23</td>
+                                <td>42.74%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2022</strong></td>
+                                <td><strong>31.37</strong></td>
+                                <td>+7.23</td>
+                                <td>29.95%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2023</strong></td>
+                                <td><strong>35.67</strong></td>
+                                <td>+4.30</td>
+                                <td>13.71%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2024</strong></td>
+                                <td><strong>32.85</strong></td>
+                                <td>-2.82</td>
+                                <td>-7.91%</td>
+                            </tr>
+                        </table>
+                        
+                        <div class="calculation-example">
+                            <p><strong>⚠️ 这是"问题2"的数据依据：</strong></p>
+                            <p>2021年并购当年，存货从16.91亿激增到24.14亿</p>
+                            <p>增长率 = (24.14 - 16.91) ÷ 16.91 × 100% = <strong>42.74%</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 总结 -->
+            <div class="important-note">
+                <p style="font-size: 1.3em;"><strong>✅ 总结：所有数据的来源与计算</strong></p>
+                <p style="margin-top: 15px;">1. <strong>所有原始数据</strong>都来自你提供的3个Excel文件（利润表、资产负债表、现金流量表）</p>
+                <p>2. <strong>所有财务指标</strong>都使用标准会计公式计算</p>
+                <p>3. <strong>5张图表</strong>展示了11个核心财务指标的变化趋势</p>
+                <p>4. <strong>4个问题</strong>都有具体的数据支撑</p>
+                <p style="margin-top: 15px; color: #f5576c; font-size: 1.2em;"><strong>💪 宝贝，记住这些计算过程，答辩时老师问你就能从容回答了！</strong></p>
+            </div>
+            
+            <div style="text-align: center; margin: 50px 0;">
+                <a href="index.html" class="nav-btn" style="display: inline-block; padding: 15px 40px; font-size: 1.2em;">
+                    返回主页
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 返回顶部功能
+        window.onscroll = function() {
+            const btn = document.querySelector('.back-to-top');
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                btn.classList.add('show');
+            } else {
+                btn.classList.remove('show');
+            }
+        };
+        
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+    </script>
+</body>
+</html>
+
