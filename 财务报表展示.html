@@ -208,6 +208,7 @@
             <button class="tab active" onclick="showTable('profit')">利润表</button>
             <button class="tab" onclick="showTable('balance')">资产负债表</button>
             <button class="tab" onclick="showTable('cashflow')">现金流量表</button>
+            <button class="tab" onclick="showTable('indicators')">📈 财务指标分析</button>
         </div>
         
         <div class="content">
@@ -3559,6 +3560,182 @@
     </tr>
   </tbody>
 </table>
+                </div>
+            </div>
+            
+            <div id="indicators" class="table-section">
+                <h2 class="table-title">财务指标分析（2020-2024年）</h2>
+                <div class="table-wrapper">
+                    <table class="dataframe">
+  <thead>
+    <tr style="text-align: center;">
+      <th style="text-align: left;">指标类别</th>
+      <th style="text-align: left;">财务指标</th>
+      <th>单位</th>
+      <th>2020年</th>
+      <th>2021年</th>
+      <th>2022年</th>
+      <th>2023年</th>
+      <th>2024年</th>
+      <th style="text-align: left;">计算公式</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- 盈利能力 -->
+    <tr style="background: #e8f4f8;">
+      <td rowspan="4" style="vertical-align: middle; font-weight: bold; color: #667eea; border-right: 3px solid #667eea;">盈利能力</td>
+      <td>营业收入</td>
+      <td>亿元</td>
+      <td>69.65</td>
+      <td>92.72</td>
+      <td>121.83</td>
+      <td>140.45</td>
+      <td>151.27</td>
+      <td>营业总收入</td>
+    </tr>
+    <tr style="background: #e8f4f8;">
+      <td>归属于母公司所有者的净利润</td>
+      <td>亿元</td>
+      <td>6.04</td>
+      <td>6.82</td>
+      <td>11.01</td>
+      <td>14.78</td>
+      <td>14.85</td>
+      <td>报表数据</td>
+    </tr>
+    <tr style="background: #e8f4f8;">
+      <td>销售净利率</td>
+      <td>%</td>
+      <td>8.67</td>
+      <td>7.41</td>
+      <td>9.17</td>
+      <td>10.69</td>
+      <td>10.01</td>
+      <td>净利润/营业收入×100%</td>
+    </tr>
+    <tr style="background: #e8f4f8;">
+      <td>净资产收益率(ROE)</td>
+      <td>%</td>
+      <td>19.52</td>
+      <td>15.56</td>
+      <td>13.11</td>
+      <td>12.11</td>
+      <td>11.57</td>
+      <td>净利润/所有者权益×100%</td>
+    </tr>
+    
+    <!-- 空行 -->
+    <tr><td colspan="9" style="height: 10px; background: white;"></td></tr>
+    
+    <!-- 营运能力 -->
+    <tr style="background: #fff8e8;">
+      <td rowspan="5" style="vertical-align: middle; font-weight: bold; color: #f093fb; border-right: 3px solid #f093fb;">营运能力</td>
+      <td>应收账款周转率</td>
+      <td>次</td>
+      <td>26.84</td>
+      <td>20.82</td>
+      <td>19.07</td>
+      <td>21.51</td>
+      <td>25.31</td>
+      <td>营业收入/应收账款平均余额</td>
+    </tr>
+    <tr style="background: #fff8e8;">
+      <td>存货周转率</td>
+      <td>次</td>
+      <td>3.02</td>
+      <td>3.52</td>
+      <td>3.43</td>
+      <td>3.22</td>
+      <td>3.39</td>
+      <td>营业成本/存货平均余额</td>
+    </tr>
+    <tr style="background: #fff8e8;">
+      <td>流动资产周转率</td>
+      <td>次</td>
+      <td>1.86</td>
+      <td>2.18</td>
+      <td>1.66</td>
+      <td>1.36</td>
+      <td>1.46</td>
+      <td>营业收入/流动资产平均余额</td>
+    </tr>
+    <tr style="background: #fff8e8;">
+      <td>固定资产周转率</td>
+      <td>次</td>
+      <td>3.92</td>
+      <td>3.76</td>
+      <td>3.90</td>
+      <td>3.79</td>
+      <td>3.30</td>
+      <td>营业收入/固定资产平均余额</td>
+    </tr>
+    <tr style="background: #fff8e8;">
+      <td>总资产周转率</td>
+      <td>次</td>
+      <td>1.09</td>
+      <td>1.17</td>
+      <td>0.98</td>
+      <td>0.84</td>
+      <td>0.87</td>
+      <td>营业收入/总资产平均余额</td>
+    </tr>
+    
+    <!-- 空行 -->
+    <tr><td colspan="9" style="height: 10px; background: white;"></td></tr>
+    
+    <!-- 偿债能力 -->
+    <tr style="background: #f8e8e8;">
+      <td rowspan="4" style="vertical-align: middle; font-weight: bold; color: #764ba2; border-right: 3px solid #764ba2;">偿债能力</td>
+      <td>流动比率</td>
+      <td>倍</td>
+      <td>1.66</td>
+      <td>1.38</td>
+      <td>2.66</td>
+      <td>2.60</td>
+      <td>2.81</td>
+      <td>流动资产/流动负债</td>
+    </tr>
+    <tr style="background: #f8e8e8;">
+      <td>速动比率</td>
+      <td>倍</td>
+      <td>0.98</td>
+      <td>0.62</td>
+      <td>1.85</td>
+      <td>1.71</td>
+      <td>1.92</td>
+      <td>速动资产/流动负债</td>
+    </tr>
+    <tr style="background: #f8e8e8;">
+      <td>资产负债率</td>
+      <td>%</td>
+      <td>48.09</td>
+      <td>41.36</td>
+      <td>26.29</td>
+      <td>25.43</td>
+      <td>23.62</td>
+      <td>负债总额/资产总额×100%</td>
+    </tr>
+    <tr style="background: #f8e8e8;">
+      <td>利息保障倍数</td>
+      <td>倍</td>
+      <td>55.68</td>
+      <td>67.08</td>
+      <td>115.30</td>
+      <td>136.20</td>
+      <td>1290.87</td>
+      <td>息税前利润/利息费用</td>
+    </tr>
+  </tbody>
+</table>
+                </div>
+                
+                <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 10px; border-left: 4px solid #667eea;">
+                    <h3 style="color: #667eea; margin-bottom: 15px;">📌 指标说明</h3>
+                    <ul style="line-height: 2; color: #666;">
+                        <li><strong>盈利能力</strong>：反映企业获取利润的能力，指标越高表明盈利能力越强</li>
+                        <li><strong>营运能力</strong>：反映企业资产运营效率，周转率越高表明资产利用效率越高</li>
+                        <li><strong>偿债能力</strong>：反映企业偿还债务的能力，比率越高表明偿债能力越强</li>
+                    </ul>
                 </div>
             </div>
         </div>
