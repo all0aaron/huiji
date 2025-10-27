@@ -44,6 +44,32 @@
             opacity: 0.9;
         }
         
+        .nav-buttons {
+            margin-top: 25px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            padding: 12px 25px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            border: 2px solid white;
+            transition: all 0.3s;
+            font-weight: bold;
+            font-size: 0.95em;
+        }
+        
+        .nav-btn:hover {
+            background: white;
+            color: #667eea;
+            transform: translateY(-2px);
+        }
+        
         .tabs {
             display: flex;
             background: #f8f9fa;
@@ -163,6 +189,36 @@
             text-align: right;
         }
         
+        /* 返回顶部按钮 */
+        .back-to-top {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s;
+            opacity: 0;
+            visibility: hidden;
+            z-index: 1000;
+        }
+        
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+        
         /* 响应式设计 */
         @media (max-width: 768px) {
             body {
@@ -194,14 +250,28 @@
             th, td {
                 padding: 10px 8px;
             }
+            
+            .back-to-top {
+                bottom: 20px;
+                right: 20px;
+            }
         }
     </style>
 </head>
 <body>
+    <button class="back-to-top" onclick="scrollToTop()">↑</button>
+    
     <div class="container">
         <div class="header">
             <h1>📊 安井食品财务报表</h1>
             <p>财务数据分析与展示</p>
+            <div class="nav-buttons">
+                <a href="index.html" class="nav-btn">📄 开题报告</a>
+                <a href="faq.html" class="nav-btn">❓ 常见问题</a>
+                <a href="data-details.html" class="nav-btn">📊 数据说明</a>
+                <a href="specific-questions.html" class="nav-btn">📐 问题详解</a>
+                <a href="love.html" class="nav-btn">💕 特别的话</a>
+            </div>
         </div>
         
         <div class="tabs">
@@ -3761,6 +3831,24 @@
             // 激活对应的标签
             event.target.classList.add('active');
         }
+        
+        // 返回顶部功能
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+        
+        // 监听滚动事件，显示/隐藏返回顶部按钮
+        window.addEventListener('scroll', function() {
+            const backToTop = document.querySelector('.back-to-top');
+            if (window.pageYOffset > 300) {
+                backToTop.classList.add('show');
+            } else {
+                backToTop.classList.remove('show');
+            }
+        });
     </script>
 </body>
 </html>
