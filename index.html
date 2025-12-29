@@ -248,6 +248,17 @@
             transform: translateY(-5px);
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
         }
+        
+        /* 导航按钮悬停效果 */
+        .header a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.3) !important;
+        }
+        
+        .sidebar-nav > div a:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(255, 215, 0, 0.6) !important;
+        }
     </style>
 </head>
 <body>
@@ -260,6 +271,8 @@
             <h1>📚 本科生毕业论文（设计）开题报告</h1>
             <p>安井食品并购新宏业动因及绩效分析</p>
             <div style="margin-top: 25px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                <a href="index2.html" style="padding: 12px 30px; background: rgba(255,215,0,0.3); color: white; text-decoration: none; border-radius: 25px; border: 2px solid #FFD700; transition: all 0.3s; font-weight: bold; font-size: 1.1em; box-shadow: 0 4px 15px rgba(255,215,0,0.4);">📘 前往毕业论文</a>
+                <a href="论文数据分析总览.html" style="padding: 12px 30px; background: rgba(46,213,115,0.3); color: white; text-decoration: none; border-radius: 25px; border: 2px solid #2ecc71; transition: all 0.3s; font-weight: bold; font-size: 1.1em; box-shadow: 0 4px 15px rgba(46,213,115,0.4);">📊 数据分析总览</a>
                 <a href="ppt-speech.html" style="padding: 12px 25px; background: rgba(255,255,255,0.2); color: white; text-decoration: none; border-radius: 25px; border: 2px solid white; transition: all 0.3s; font-weight: bold;">📢 PPT演讲稿</a>
                 <a href="财务报表展示.html" style="padding: 12px 25px; background: rgba(255,255,255,0.2); color: white; text-decoration: none; border-radius: 25px; border: 2px solid white; transition: all 0.3s; font-weight: bold;">📈 财务报表展示</a>
                 <a href="faq.html" style="padding: 12px 25px; background: rgba(255,255,255,0.2); color: white; text-decoration: none; border-radius: 25px; border: 2px solid white; transition: all 0.3s; font-weight: bold;">❓ 常见问题解答</a>
@@ -787,6 +800,16 @@
         <!-- 右侧固定导航 -->
         <nav class="sidebar-nav">
             <h2>📑 目录导航</h2>
+            
+            <div style="margin-bottom: 20px; display: flex; flex-direction: column; gap: 10px;">
+                <a href="index2.html" style="display: block; padding: 12px; background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); color: #333; text-decoration: none; border-radius: 8px; font-weight: bold; box-shadow: 0 4px 10px rgba(255, 215, 0, 0.4); transition: all 0.3s; text-align: center;">
+                    📘 前往毕业论文
+                </a>
+                <a href="论文数据分析总览.html" style="display: block; padding: 12px; background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%); color: white; text-decoration: none; border-radius: 8px; font-weight: bold; box-shadow: 0 4px 10px rgba(46, 204, 113, 0.4); transition: all 0.3s; text-align: center;">
+                    📊 数据分析总览
+                </a>
+            </div>
+            
             <ul>
                 <li><a href="#chapter1">📖 第1章 绪论</a></li>
                 <li style="padding-left: 15px;"><a href="#c1s1">→ 1.1 研究背景与意义</a></li>

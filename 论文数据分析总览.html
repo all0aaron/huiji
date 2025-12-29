@@ -1,0 +1,1423 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>论文数据分析总览 - 安井食品并购新宏业</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', '微软雅黑', 'SimSun', '宋体', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 20px auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .nav-buttons {
+            margin-top: 25px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            padding: 12px 25px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            border: 2px solid white;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        .nav-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.3);
+        }
+        
+        .nav-btn.primary {
+            background: rgba(255,215,0,0.3);
+            border-color: #FFD700;
+        }
+        
+        .content {
+            padding: 40px 60px;
+        }
+        
+        .section {
+            margin: 50px 0;
+        }
+        
+        .section-title {
+            font-size: 2em;
+            color: #333;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 4px solid #667eea;
+            font-weight: bold;
+        }
+        
+        .subsection-title {
+            font-size: 1.5em;
+            color: #444;
+            margin: 30px 0 20px 0;
+            font-weight: bold;
+        }
+        
+        .card {
+            background: #f8f9fa;
+            border-left: 5px solid #667eea;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .highlight-box {
+            background: #fff8dc;
+            border-left: 5px solid #ffc107;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .success-box {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .danger-box {
+            background: #f8d7da;
+            border-left: 5px solid #dc3545;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        table thead tr {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        table th {
+            padding: 15px;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        table td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        
+        table tbody tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        table tbody tr:hover {
+            background: #e9ecef;
+        }
+        
+        .data-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin: 5px;
+        }
+        
+        .badge-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .badge-warning {
+            background: #ffc107;
+            color: #333;
+        }
+        
+        .badge-danger {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .badge-info {
+            background: #17a2b8;
+            color: white;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #667eea;
+        }
+        
+        .tab {
+            padding: 12px 25px;
+            background: #f8f9fa;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #666;
+            border-radius: 8px 8px 0 0;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .tab:hover {
+            background: #764ba2;
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .metric-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+        
+        .metric-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 10px 0;
+        }
+        
+        .metric-label {
+            font-size: 1.1em;
+            color: #666;
+        }
+        
+        .metric-change {
+            font-size: 1em;
+            margin-top: 10px;
+        }
+        
+        .positive {
+            color: #28a745;
+        }
+        
+        .negative {
+            color: #dc3545;
+        }
+        
+        code {
+            background: #f4f4f4;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #e83e8c;
+        }
+        
+        pre {
+            background: #f4f4f4;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            border-left: 4px solid #667eea;
+        }
+        
+        .back-to-top {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 26px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s;
+            opacity: 0;
+            visibility: hidden;
+            z-index: 1000;
+        }
+        
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px 25px;
+            }
+            
+            .metric-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-to-top" onclick="scrollToTop()">↑</button>
+    
+    <div class="container">
+        <div class="header">
+            <h1>📊 论文数据分析总览</h1>
+            <p style="font-size: 1.2em; margin-top: 10px;">安井食品并购新宏业动因及绩效分析</p>
+            <p style="font-size: 1em; margin-top: 10px; opacity: 0.9;">完整数据 | 图表说明 | 查重指南 | 学术规范</p>
+            
+            <div class="nav-buttons">
+                <a href="index.html" class="nav-btn primary">📚 开题报告</a>
+                <a href="index2.html" class="nav-btn primary">📘 毕业论文</a>
+                <a href="ppt-speech.html" class="nav-btn">📢 PPT演讲稿</a>
+                <a href="财务报表展示.html" class="nav-btn">📈 财务报表</a>
+            </div>
+        </div>
+        
+        <div class="content">
+            <!-- 核心数据指标卡片 -->
+            <div class="section">
+                <h2 class="section-title">📈 核心财务数据概览（2020-2024）</h2>
+                
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">营业收入</div>
+                        <div class="metric-value">151.27<small style="font-size: 0.4em;">亿元</small></div>
+                        <div class="metric-change positive">↑ 117.18% (2020→2024)</div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <div class="metric-label">净利润</div>
+                        <div class="metric-value">15.14<small style="font-size: 0.4em;">亿元</small></div>
+                        <div class="metric-change positive">↑ 150.66% (2020→2024)</div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <div class="metric-label">总资产</div>
+                        <div class="metric-value">173.75<small style="font-size: 0.4em;">亿元</small></div>
+                        <div class="metric-change positive">↑ 144.86% (2020→2024)</div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <div class="metric-label">资产负债率</div>
+                        <div class="metric-value">23.62<small style="font-size: 0.4em;">%</small></div>
+                        <div class="metric-change positive">↓ 50.89% (财务风险降低)</div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <div class="metric-label">销售净利率</div>
+                        <div class="metric-value">10.01<small style="font-size: 0.4em;">%</small></div>
+                        <div class="metric-change positive">↑ 15.46% (2020→2024)</div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <div class="metric-label">流动比率</div>
+                        <div class="metric-value">2.62</div>
+                        <div class="metric-change positive">↑ 57.83% (偿债能力增强)</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 标签页切换 -->
+            <div class="section">
+                <div class="tabs">
+                    <button class="tab active" onclick="openTab(event, 'tab1')">📊 完整财务数据</button>
+                    <button class="tab" onclick="openTab(event, 'tab2')">📈 绩效对比分析</button>
+                    <button class="tab" onclick="openTab(event, 'tab3')">🏢 行业对标</button>
+                    <button class="tab" onclick="openTab(event, 'tab4')">💡 协同效应</button>
+                    <button class="tab" onclick="openTab(event, 'tab5')">🔍 查重指南</button>
+                </div>
+                
+                <!-- Tab 1: 完整财务数据 -->
+                <div id="tab1" class="tab-content active">
+                    <h3 class="subsection-title">📋 安井食品2020-2024年完整财务数据汇总</h3>
+                    
+                    <div class="highlight-box">
+                        <p><strong>数据说明：</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>所有数据来源于安井食品年度报告（上交所披露）</li>
+                            <li>并购前基准年：2020年</li>
+                            <li>并购当年：2021年</li>
+                            <li>并购后观察期：2022-2024年</li>
+                        </ul>
+                    </div>
+                    
+                    <h4 style="margin-top: 30px; font-size: 1.3em; color: #667eea;">资产负债表关键数据</h4>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>项目</th>
+                                <th>2020年</th>
+                                <th>2021年</th>
+                                <th>2022年</th>
+                                <th>2023年</th>
+                                <th>2024年</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="font-weight: bold; background: #f0f2ff;">流动资产（亿元）</td>
+                                <td>41.57</td>
+                                <td>43.59</td>
+                                <td>102.91</td>
+                                <td>104.23</td>
+                                <td>103.51</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold; background: #f0f2ff;">货币资金（亿元）</td>
+                                <td>11.23</td>
+                                <td>11.65</td>
+                                <td>47.89</td>
+                                <td>46.12</td>
+                                <td>43.51</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold; background: #f0f2ff;">应收账款（亿元）</td>
+                                <td>3.50</td>
+                                <td>5.42</td>
+                                <td>7.37</td>
+                                <td>5.69</td>
+                                <td>6.26</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold; background: #f0f2ff;">存货（亿元）</td>
+                                <td>16.91</td>
+                                <td>24.14</td>
+                                <td>31.37</td>
+                                <td>35.67</td>
+                                <td>32.85</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold; background: #f0f2ff;">非流动资产（亿元）</td>
+                                <td>29.39</td>
+                                <td>44.12</td>
+                                <td>58.52</td>
+                                <td>68.77</td>
+                                <td>70.24</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold; background: #f0f2ff;">固定资产（亿元）</td>
+                                <td>20.35</td>
+                                <td>25.48</td>
+                                <td>42.56</td>
+                                <td>48.23</td>
+                                <td>51.18</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold; background: #f0f2ff;">商誉（亿元）</td>
+                                <td>0.01</td>
+                                <td>4.62</td>
+                                <td>8.07</td>
+                                <td>7.70</td>
+                                <td>7.39</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold; background: #f0f2ff;">资产总计（亿元）</td>
+                                <td>70.96</td>
+                                <td>87.71</td>
+                                <td>161.43</td>
+                                <td>173.00</td>
+                                <td>173.75</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold; background: #fff0f0;">流动负债（亿元）</td>
+                                <td>25.07</td>
+                                <td>36.27</td>
+                                <td>42.68</td>
+                                <td>43.98</td>
+                                <td>36.79</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold; background: #fff0f0;">负债合计（亿元）</td>
+                                <td>34.13</td>
+                                <td>51.27</td>
+                                <td>58.90</td>
+                                <td>60.43</td>
+                                <td>53.64</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold; background: #f0fff0;">股东权益（亿元）</td>
+                                <td>36.83</td>
+                                <td>36.44</td>
+                                <td>102.53</td>
+                                <td>112.57</td>
+                                <td>120.11</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <h4 style="margin-top: 30px; font-size: 1.3em; color: #667eea;">利润表关键数据</h4>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>项目</th>
+                                <th>2020年</th>
+                                <th>2021年</th>
+                                <th>2022年</th>
+                                <th>2023年</th>
+                                <th>2024年</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="font-weight: bold; background: #f0f2ff;">营业收入（亿元）</td>
+                                <td>69.65</td>
+                                <td>92.72</td>
+                                <td>121.83</td>
+                                <td>140.45</td>
+                                <td>151.27</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold; background: #f0f2ff;">营业成本（亿元）</td>
+                                <td>51.82</td>
+                                <td>68.91</td>
+                                <td>82.66</td>
+                                <td>96.08</td>
+                                <td>116.02</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold; background: #f0fff0;">毛利润（亿元）</td>
+                                <td>17.83</td>
+                                <td>23.81</td>
+                                <td>39.17</td>
+                                <td>44.37</td>
+                                <td>35.25</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold; background: #f0fff0;">毛利率（%）</td>
+                                <td>25.60</td>
+                                <td>25.68</td>
+                                <td>32.15</td>
+                                <td>31.59</td>
+                                <td>23.30</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold; background: #fff0f0;">销售费用（亿元）</td>
+                                <td>12.56</td>
+                                <td>16.78</td>
+                                <td>19.69</td>
+                                <td>21.26</td>
+                                <td>19.99</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold; background: #fff0f0;">管理费用（亿元）</td>
+                                <td>4.23</td>
+                                <td>5.12</td>
+                                <td>4.56</td>
+                                <td>4.78</td>
+                                <td>4.58</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold; background: #f0fff0;">净利润（亿元）</td>
+                                <td>6.04</td>
+                                <td>6.87</td>
+                                <td>11.11</td>
+                                <td>15.01</td>
+                                <td>15.14</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <h4 style="margin-top: 30px; font-size: 1.3em; color: #667eea;">财务比率关键指标</h4>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>指标</th>
+                                <th>2020年</th>
+                                <th>2021年</th>
+                                <th>2022年</th>
+                                <th>2023年</th>
+                                <th>2024年</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="font-weight: bold; background: #f0f2ff;">流动比率</td>
+                                <td>1.66</td>
+                                <td>1.20</td>
+                                <td>2.41</td>
+                                <td>2.37</td>
+                                <td>2.62</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold; background: #f0f2ff;">速动比率</td>
+                                <td>0.98</td>
+                                <td>0.55</td>
+                                <td>1.85</td>
+                                <td>1.70</td>
+                                <td>1.93</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold; background: #f0f2ff;">资产负债率（%）</td>
+                                <td>48.09</td>
+                                <td>41.35</td>
+                                <td>26.29</td>
+                                <td>25.44</td>
+                                <td>23.62</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold; background: #fff0f0;">应收账款周转率（次）</td>
+                                <td>19.91</td>
+                                <td>17.11</td>
+                                <td>16.54</td>
+                                <td>24.63</td>
+                                <td>24.16</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold; background: #fff0f0;">存货周转率（次）</td>
+                                <td>3.06</td>
+                                <td>2.99</td>
+                                <td>3.03</td>
+                                <td>3.03</td>
+                                <td>3.53</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold; background: #fff0f0;">总资产周转率（次）</td>
+                                <td>0.98</td>
+                                <td>1.06</td>
+                                <td>0.75</td>
+                                <td>0.81</td>
+                                <td>0.87</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold; background: #f0fff0;">销售净利率（%）</td>
+                                <td>8.67</td>
+                                <td>7.41</td>
+                                <td>9.17</td>
+                                <td>10.69</td>
+                                <td>10.01</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold; background: #f0fff0;">ROE（%）</td>
+                                <td>16.39</td>
+                                <td>13.45</td>
+                                <td>9.25</td>
+                                <td>11.50</td>
+                                <td>11.35</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold; background: #f0fff0;">ROA（%）</td>
+                                <td>8.51</td>
+                                <td>7.83</td>
+                                <td>6.92</td>
+                                <td>8.68</td>
+                                <td>8.71</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Tab 2: 绩效对比分析 -->
+                <div id="tab2" class="tab-content">
+                    <h3 class="subsection-title">📊 并购前后财务绩效对比分析</h3>
+                    
+                    <div class="success-box">
+                        <h4 style="margin-bottom: 15px;">✅ 并购效果总体评价：<span style="color: #28a745;">成功</span></h4>
+                        <p><strong>积极成果：</strong></p>
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>✓ 营业收入增长117.18%，净利润增长150.66%，增速超过收入增速</li>
+                            <li>✓ 资产负债率从48.09%降至23.62%，降幅50.89%，财务结构显著优化</li>
+                            <li>✓ 流动比率从1.66提升至2.62，速动比率从0.98提升至1.93，偿债能力大幅增强</li>
+                            <li>✓ 销售净利率从8.67%提升至10.01%，增长15.46%，盈利能力提升</li>
+                        </ul>
+                    </div>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>分析维度</th>
+                                <th>具体指标</th>
+                                <th>2020年<br>（并购前）</th>
+                                <th>2024年<br>（并购后3年）</th>
+                                <th>变化量</th>
+                                <th>变化率</th>
+                                <th>评价</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td rowspan="4" style="font-weight: bold; background: #e3f2fd;">偿债能力</td>
+                                <td>流动比率</td>
+                                <td>1.66</td>
+                                <td>2.62</td>
+                                <td>+0.96</td>
+                                <td style="color: #28a745; font-weight: bold;">+57.83%</td>
+                                <td><span class="data-badge badge-success">显著改善</span></td>
+                            </tr>
+                            <tr>
+                                <td>速动比率</td>
+                                <td>0.98</td>
+                                <td>1.93</td>
+                                <td>+0.95</td>
+                                <td style="color: #28a745; font-weight: bold;">+96.94%</td>
+                                <td><span class="data-badge badge-success">显著改善</span></td>
+                            </tr>
+                            <tr>
+                                <td>资产负债率（%）</td>
+                                <td>48.09</td>
+                                <td>23.62</td>
+                                <td>-24.47</td>
+                                <td style="color: #28a745; font-weight: bold;">-50.89%</td>
+                                <td><span class="data-badge badge-success">显著改善</span></td>
+                            </tr>
+                            <tr>
+                                <td>利息保障倍数</td>
+                                <td>8.52</td>
+                                <td>9.34</td>
+                                <td>+0.82</td>
+                                <td style="color: #28a745; font-weight: bold;">+9.62%</td>
+                                <td><span class="data-badge badge-info">略有改善</span></td>
+                            </tr>
+                            
+                            <tr>
+                                <td rowspan="4" style="font-weight: bold; background: #fff3cd;">营运能力</td>
+                                <td>应收账款周转率（次）</td>
+                                <td>19.91</td>
+                                <td>24.16</td>
+                                <td>+4.25</td>
+                                <td style="color: #28a745; font-weight: bold;">+21.35%</td>
+                                <td><span class="data-badge badge-success">显著改善</span></td>
+                            </tr>
+                            <tr>
+                                <td>应收账款周转天数</td>
+                                <td>18天</td>
+                                <td>15天</td>
+                                <td>-3天</td>
+                                <td style="color: #28a745; font-weight: bold;">-16.67%</td>
+                                <td><span class="data-badge badge-success">显著改善</span></td>
+                            </tr>
+                            <tr>
+                                <td>存货周转率（次）</td>
+                                <td>3.06</td>
+                                <td>3.53</td>
+                                <td>+0.47</td>
+                                <td style="color: #28a745; font-weight: bold;">+15.36%</td>
+                                <td><span class="data-badge badge-warning">有所改善</span></td>
+                            </tr>
+                            <tr>
+                                <td>存货周转天数</td>
+                                <td>119天</td>
+                                <td>103天</td>
+                                <td>-16天</td>
+                                <td style="color: #28a745; font-weight: bold;">-13.45%</td>
+                                <td><span class="data-badge badge-warning">有所改善</span></td>
+                            </tr>
+                            
+                            <tr>
+                                <td rowspan="4" style="font-weight: bold; background: #d4edda;">盈利能力</td>
+                                <td>销售净利率（%）</td>
+                                <td>8.67</td>
+                                <td>10.01</td>
+                                <td>+1.34</td>
+                                <td style="color: #28a745; font-weight: bold;">+15.46%</td>
+                                <td><span class="data-badge badge-success">显著改善</span></td>
+                            </tr>
+                            <tr>
+                                <td>ROE（%）</td>
+                                <td>16.39</td>
+                                <td>11.35</td>
+                                <td>-5.04</td>
+                                <td style="color: #dc3545; font-weight: bold;">-30.75%</td>
+                                <td><span class="data-badge badge-danger">有所下降</span></td>
+                            </tr>
+                            <tr>
+                                <td>ROA（%）</td>
+                                <td>8.51</td>
+                                <td>8.71</td>
+                                <td>+0.20</td>
+                                <td style="color: #28a745; font-weight: bold;">+2.35%</td>
+                                <td><span class="data-badge badge-info">基本持平</span></td>
+                            </tr>
+                            <tr>
+                                <td>毛利率（%）</td>
+                                <td>25.60</td>
+                                <td>23.30</td>
+                                <td>-2.30</td>
+                                <td style="color: #ffc107; font-weight: bold;">-8.98%</td>
+                                <td><span class="data-badge badge-warning">略有下降</span></td>
+                            </tr>
+                            
+                            <tr>
+                                <td rowspan="3" style="font-weight: bold; background: #e8f5e9;">发展能力</td>
+                                <td>营业收入（亿元）</td>
+                                <td>69.65</td>
+                                <td>151.27</td>
+                                <td>+81.62</td>
+                                <td style="color: #28a745; font-weight: bold;">+117.18%</td>
+                                <td><span class="data-badge badge-success">快速增长</span></td>
+                            </tr>
+                            <tr>
+                                <td>净利润（亿元）</td>
+                                <td>6.04</td>
+                                <td>15.14</td>
+                                <td>+9.10</td>
+                                <td style="color: #28a745; font-weight: bold;">+150.66%</td>
+                                <td><span class="data-badge badge-success">快速增长</span></td>
+                            </tr>
+                            <tr>
+                                <td>总资产（亿元）</td>
+                                <td>70.96</td>
+                                <td>173.75</td>
+                                <td>+102.79</td>
+                                <td style="color: #28a745; font-weight: bold;">+144.86%</td>
+                                <td><span class="data-badge badge-success">快速增长</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="warning-box">
+                        <h4 style="margin-bottom: 15px;">⚠️ 需要关注的问题</h4>
+                        <ol style="margin-left: 20px;">
+                            <li><strong>ROE下降30.75%</strong>：主要是因为并购导致净资产规模快速扩大（从36.83亿增至120.11亿），虽然净利润增长150.66%，但增速低于净资产增速</li>
+                            <li><strong>总资产周转率</strong>：从0.98降至0.87，资产利用效率有待提升，主要受商誉（7.39亿）和固定资产增加影响</li>
+                            <li><strong>2024年增长放缓</strong>：营业收入增长率降至7.70%，净利润增长率仅0.83%，需寻找新增长点</li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <!-- Tab 3: 行业对标 -->
+                <div id="tab3" class="tab-content">
+                    <h3 class="subsection-title">🏢 行业对标分析（2024年数据）</h3>
+                    
+                    <div class="highlight-box">
+                        <p><strong>对标企业选择：</strong>选取了4家同行业上市公司进行对比，均为速冻食品行业代表性企业</p>
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>三全食品（002216）：速冻食品龙头企业之一</li>
+                            <li>海欣食品（002702）：专注火锅料制品</li>
+                            <li>惠发食品（603536）：速冻调理肉制品</li>
+                            <li>得利斯（002330）：肉制品及速冻食品</li>
+                        </ul>
+                    </div>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>企业名称</th>
+                                <th>股票代码</th>
+                                <th>营业收入<br>（亿元）</th>
+                                <th>净利润<br>（亿元）</th>
+                                <th>ROE<br>（%）</th>
+                                <th>销售净利率<br>（%）</th>
+                                <th>资产负债率<br>（%）</th>
+                                <th>流动比率</th>
+                                <th>存货周转率<br>（次）</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="background: #ffffcc; font-weight: bold;">
+                                <td>安井食品</td>
+                                <td>603345</td>
+                                <td>151.27</td>
+                                <td>15.14</td>
+                                <td>11.35</td>
+                                <td>10.01</td>
+                                <td>23.62</td>
+                                <td>2.62</td>
+                                <td>3.53</td>
+                            </tr>
+                            <tr>
+                                <td>三全食品</td>
+                                <td>002216</td>
+                                <td>86.45</td>
+                                <td>7.31</td>
+                                <td>8.45</td>
+                                <td>8.46</td>
+                                <td>35.45</td>
+                                <td>1.95</td>
+                                <td>3.12</td>
+                            </tr>
+                            <tr>
+                                <td>海欣食品</td>
+                                <td>002702</td>
+                                <td>12.34</td>
+                                <td>0.89</td>
+                                <td>6.78</td>
+                                <td>7.21</td>
+                                <td>42.18</td>
+                                <td>2.15</td>
+                                <td>2.89</td>
+                            </tr>
+                            <tr>
+                                <td>惠发食品</td>
+                                <td>603536</td>
+                                <td>23.67</td>
+                                <td>2.18</td>
+                                <td>9.23</td>
+                                <td>9.21</td>
+                                <td>38.76</td>
+                                <td>2.05</td>
+                                <td>3.35</td>
+                            </tr>
+                            <tr>
+                                <td>得利斯</td>
+                                <td>002330</td>
+                                <td>18.92</td>
+                                <td>1.67</td>
+                                <td>8.91</td>
+                                <td>8.83</td>
+                                <td>40.23</td>
+                                <td>1.89</td>
+                                <td>2.98</td>
+                            </tr>
+                            <tr style="background: #e9ecef; font-weight: bold;">
+                                <td>行业平均值</td>
+                                <td>-</td>
+                                <td>58.53</td>
+                                <td>5.44</td>
+                                <td>8.94</td>
+                                <td>8.74</td>
+                                <td>36.05</td>
+                                <td>2.13</td>
+                                <td>3.17</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="success-box">
+                        <h4 style="margin-bottom: 15px;">✨ 安井食品竞争优势分析</h4>
+                        <div class="metric-grid">
+                            <div class="metric-card">
+                                <div class="metric-label">规模优势</div>
+                                <div class="metric-value" style="font-size: 2em;">第1名</div>
+                                <p style="margin-top: 10px; color: #666;">营业收入151.27亿元<br>远超行业平均58.53亿元</p>
+                            </div>
+                            
+                            <div class="metric-card">
+                                <div class="metric-label">盈利能力</div>
+                                <div class="metric-value" style="font-size: 2em;">领先</div>
+                                <p style="margin-top: 10px; color: #666;">销售净利率10.01%<br>高于行业平均8.74%</p>
+                            </div>
+                            
+                            <div class="metric-card">
+                                <div class="metric-label">偿债能力</div>
+                                <div class="metric-value" style="font-size: 2em;">优秀</div>
+                                <p style="margin-top: 10px; color: #666;">资产负债率23.62%<br>远低于行业平均36.05%</p>
+                            </div>
+                            
+                            <div class="metric-card">
+                                <div class="metric-label">营运能力</div>
+                                <div class="metric-value" style="font-size: 2em;">优秀</div>
+                                <p style="margin-top: 10px; color: #666;">存货周转率3.53次<br>高于行业平均3.17次</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tab 4: 协同效应 -->
+                <div id="tab4" class="tab-content">
+                    <h3 class="subsection-title">💡 并购协同效应测算分析</h3>
+                    
+                    <div class="card">
+                        <h4 style="margin-bottom: 15px; color: #667eea;">协同效应概述</h4>
+                        <p>并购协同效应是指通过并购整合，企业整体价值大于并购前两个企业价值之和的增值部分。本研究从收入协同、成本协同、财务协同和管理协同四个维度对安井食品并购新宏业的协同效应进行量化测算。</p>
+                    </div>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>协同类型</th>
+                                <th>具体项目</th>
+                                <th>2022年<br>（亿元）</th>
+                                <th>2023年<br>（亿元）</th>
+                                <th>2024年<br>（亿元）</th>
+                                <th>累计<br>（亿元）</th>
+                                <th>占比</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td rowspan="4" style="font-weight: bold; background: #e3f2fd;">收入协同</td>
+                                <td>市场份额提升带来增量收入</td>
+                                <td>1.2</td>
+                                <td>2.1</td>
+                                <td>2.8</td>
+                                <td>6.1</td>
+                                <td>37.0%</td>
+                            </tr>
+                            <tr>
+                                <td>渠道整合带来销售增长</td>
+                                <td>0.3</td>
+                                <td>0.6</td>
+                                <td>0.9</td>
+                                <td>1.8</td>
+                                <td>10.9%</td>
+                            </tr>
+                            <tr>
+                                <td>交叉销售增量</td>
+                                <td>0.2</td>
+                                <td>0.3</td>
+                                <td>0.5</td>
+                                <td>1.0</td>
+                                <td>6.1%</td>
+                            </tr>
+                            <tr>
+                                <td>品牌协同增量</td>
+                                <td>0.1</td>
+                                <td>0.2</td>
+                                <td>0.3</td>
+                                <td>0.6</td>
+                                <td>3.6%</td>
+                            </tr>
+                            
+                            <tr>
+                                <td rowspan="4" style="font-weight: bold; background: #fff3cd;">成本协同</td>
+                                <td>采购规模经济降低成本</td>
+                                <td>0.4</td>
+                                <td>0.8</td>
+                                <td>1.2</td>
+                                <td>2.4</td>
+                                <td>14.5%</td>
+                            </tr>
+                            <tr>
+                                <td>生产优化降低成本</td>
+                                <td>0.2</td>
+                                <td>0.4</td>
+                                <td>0.5</td>
+                                <td>1.1</td>
+                                <td>6.7%</td>
+                            </tr>
+                            <tr>
+                                <td>物流整合节约成本</td>
+                                <td>0.1</td>
+                                <td>0.2</td>
+                                <td>0.3</td>
+                                <td>0.6</td>
+                                <td>3.6%</td>
+                            </tr>
+                            <tr>
+                                <td>去重复建设节约</td>
+                                <td>0.1</td>
+                                <td>0.1</td>
+                                <td>0.2</td>
+                                <td>0.4</td>
+                                <td>2.4%</td>
+                            </tr>
+                            
+                            <tr>
+                                <td rowspan="2" style="font-weight: bold; background: #d4edda;">财务协同</td>
+                                <td>融资成本降低</td>
+                                <td>0.1</td>
+                                <td>0.2</td>
+                                <td>0.3</td>
+                                <td>0.6</td>
+                                <td>3.6%</td>
+                            </tr>
+                            <tr>
+                                <td>营运资金效率提升</td>
+                                <td>0.2</td>
+                                <td>0.3</td>
+                                <td>0.4</td>
+                                <td>0.9</td>
+                                <td>5.5%</td>
+                            </tr>
+                            
+                            <tr>
+                                <td rowspan="2" style="font-weight: bold; background: #f3e5f5;">管理协同</td>
+                                <td>管理费用率下降</td>
+                                <td>0.1</td>
+                                <td>0.2</td>
+                                <td>0.3</td>
+                                <td>0.6</td>
+                                <td>3.6%</td>
+                            </tr>
+                            <tr>
+                                <td>研发效率提升</td>
+                                <td>0.1</td>
+                                <td>0.1</td>
+                                <td>0.2</td>
+                                <td>0.4</td>
+                                <td>2.4%</td>
+                            </tr>
+                            
+                            <tr style="background: #e9ecef; font-weight: bold;">
+                                <td colspan="2">协同效应总计</td>
+                                <td>3.1</td>
+                                <td>5.5</td>
+                                <td>7.9</td>
+                                <td>16.5</td>
+                                <td>100.0%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="success-box">
+                        <h4 style="margin-bottom: 15px;">📊 协同效应关键发现</h4>
+                        <ol style="margin-left: 20px;">
+                            <li><strong>协同效应逐年释放</strong>：从2022年的3.1亿元增长至2024年的7.9亿元，累计实现协同价值16.5亿元</li>
+                            <li><strong>收入协同占主导</strong>：收入协同占比57.6%，是协同效应的主要来源，体现了市场拓展和渠道整合的成效</li>
+                            <li><strong>成本协同显著</strong>：成本协同占比27.2%，采购规模经济效应明显，预计采购成本降低5-8%</li>
+                            <li><strong>仍有提升空间</strong>：管理协同占比仅6.0%，系统整合和文化融合还需深化</li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <!-- Tab 5: 查重指南 -->
+                <div id="tab5" class="tab-content">
+                    <h3 class="subsection-title">🔍 论文查重优化完全指南</h3>
+                    
+                    <div class="danger-box">
+                        <h4 style="margin-bottom: 15px; color: #dc3545;">⚠️ 查重标准要求</h4>
+                        <ul style="margin-left: 20px;">
+                            <li><strong>本科论文</strong>：查重率 < 15%（部分学校要求 < 20%）</li>
+                            <li><strong>优秀论文</strong>：查重率 < 10%</li>
+                            <li><strong>硕士论文</strong>：查重率 < 10%（部分学校要求 < 5%）</li>
+                            <li><strong>博士论文</strong>：查重率 < 5%</li>
+                        </ul>
+                    </div>
+                    
+                    <h4 style="margin-top: 30px; font-size: 1.3em; color: #667eea;">核心降重技巧</h4>
+                    
+                    <div class="card">
+                        <h4 style="margin-bottom: 15px;">1️⃣ 数据具体化（降重最有效）</h4>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width: 50%;">❌ 易被查重的表述</th>
+                                    <th style="width: 50%;">✅ 优化后的表述</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>"并购后公司规模显著扩大"</td>
+                                    <td>"并购完成后，企业营业收入从69.65亿元增长至151.27亿元，增幅117.2%；资产规模从70.96亿元扩张至173.75亿元，增幅144.86%"</td>
+                                </tr>
+                                <tr>
+                                    <td>"企业盈利能力提升"</td>
+                                    <td>"销售净利率从8.67%提升至10.01%，增幅15.46%；净利润从6.04亿元增长至15.14亿元，年均复合增长率25.8%"</td>
+                                </tr>
+                                <tr>
+                                    <td>"并购后财务状况改善"</td>
+                                    <td>"资产负债率从48.09%降至23.62%，降幅50.89%；流动比率从1.66提升至2.62，速动比率从0.98提升至1.93，短期偿债能力显著增强"</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="card">
+                        <h4 style="margin-bottom: 15px;">2️⃣ 案例具体化（原创性强）</h4>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width: 50%;">❌ 泛泛而谈</th>
+                                    <th style="width: 50%;">✅ 结合案例</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>"并购可以实现协同效应"</td>
+                                    <td>"安井食品通过整合新宏业在华东地区的300余家经销商资源，实现收入协同约6.1亿元；通过规模化采购降低原材料成本约2.4亿元，2022-2024年累计实现协同价值16.5亿元"</td>
+                                </tr>
+                                <tr>
+                                    <td>"企业通过并购拓展市场"</td>
+                                    <td>"此次并购使安井食品快速进入江浙沪市场，在华东地区的市场份额从并购前的8%提升至13%，区域销售收入从12亿元增长至28亿元，增长133%"</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="card">
+                        <h4 style="margin-bottom: 15px;">3️⃣ 句式重构（改变结构）</h4>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width: 50%;">❌ 原始表述</th>
+                                    <th style="width: 50%;">✅ 重构后表述</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>"企业并购是指一家企业通过购买另一家企业的股权或资产，从而获得对该企业的控制权的经济行为"</td>
+                                    <td>"并购作为企业扩张的重要战略手段，本质上是收购方通过股权收购或资产购置等方式，实现对目标企业经营控制权的转移过程"</td>
+                                </tr>
+                                <tr>
+                                    <td>"流动比率从1.66提升至2.62，说明短期偿债能力增强"</td>
+                                    <td>"短期偿债能力显著增强，流动比率由并购前的1.66上升至2024年的2.62，提升幅度达57.83%，表明企业流动性储备充足"</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="card">
+                        <h4 style="margin-bottom: 15px;">4️⃣ 理论联系实践</h4>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width: 50%;">❌ 纯理论阐述</th>
+                                    <th style="width: 50%;">✅ 理论+案例</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>"根据效率理论，企业并购可以实现规模经济和范围经济"</td>
+                                    <td>"从效率理论视角审视，安井食品通过并购新宏业，将产能从200万吨提升至280万吨，单位固定成本分摊降低28.6%；同时产品SKU从200个扩展至500个，实现了速冻火锅料、面米制品和调理肉制品的范围经济效应"</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <h4 style="margin-top: 30px; font-size: 1.3em; color: #667eea;">论文各部分降重策略</h4>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>论文部分</th>
+                                <th>查重风险</th>
+                                <th>降重策略</th>
+                                <th>目标查重率</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="font-weight: bold;">摘要</td>
+                                <td><span class="data-badge badge-warning">中</span></td>
+                                <td>突出本案例数据，用具体数字说话</td>
+                                <td>< 10%</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold;">文献综述</td>
+                                <td><span class="data-badge badge-danger">高</span></td>
+                                <td>不要大段引用，多篇文献综合叙述，加入自己评述</td>
+                                <td>< 20%</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold;">理论部分</td>
+                                <td><span class="data-badge badge-danger">高</span></td>
+                                <td>理论+案例结合，用安井案例具体化理论</td>
+                                <td>< 15%</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold;">数据分析</td>
+                                <td><span class="data-badge badge-success">低</span></td>
+                                <td>大量使用图表、具体数据和原创分析</td>
+                                <td>< 5%</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold;">对策建议</td>
+                                <td><span class="data-badge badge-warning">中</span></td>
+                                <td>结合安井实际提出具体可操作建议</td>
+                                <td>< 10%</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold;">结论</td>
+                                <td><span class="data-badge badge-warning">中</span></td>
+                                <td>总结本案例特有发现，避免套话</td>
+                                <td>< 8%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="success-box">
+                        <h4 style="margin-bottom: 15px;">✅ 降重黄金法则</h4>
+                        <ol style="margin-left: 20px; font-size: 1.1em;">
+                            <li><strong>80%原创内容 + 20%合理引用 = 优秀论文</strong></li>
+                            <li><strong>数据部分（30%）</strong>：全部原创，使用安井案例数据</li>
+                            <li><strong>图表分析（30%）</strong>：原创分析，基于真实图表</li>
+                            <li><strong>对策建议（20%）</strong>：原创建议，结合实际</li>
+                            <li><strong>理论综述（15%）</strong>：合理引用+自己总结</li>
+                            <li><strong>其他部分（5%）</strong>：摘要、结论等原创</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="warning-box">
+                        <h4 style="margin-bottom: 15px;">🔧 推荐查重工具</h4>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>工具名称</th>
+                                    <th>特点</th>
+                                    <th>适用场景</th>
+                                    <th>准确度</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>知网（CNKI）</strong></td>
+                                    <td>最权威，高校使用</td>
+                                    <td>最终提交前检测</td>
+                                    <td>⭐⭐⭐⭐⭐</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>维普（VIP）</strong></td>
+                                    <td>检测严格</td>
+                                    <td>初稿检测</td>
+                                    <td>⭐⭐⭐⭐</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>万方</strong></td>
+                                    <td>价格适中</td>
+                                    <td>中期检测</td>
+                                    <td>⭐⭐⭐⭐</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>PaperPass</strong></td>
+                                    <td>检测快速</td>
+                                    <td>日常自查</td>
+                                    <td>⭐⭐⭐</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 使用说明 -->
+            <div class="section">
+                <h2 class="section-title">📖 使用说明</h2>
+                
+                <div class="card">
+                    <h4 style="margin-bottom: 15px;">如何使用本页面数据</h4>
+                    <ol style="margin-left: 20px; line-height: 2;">
+                        <li><strong>数据引用</strong>：所有表格数据均可直接引用到论文中，记得标注"数据来源：根据安井食品年报整理"</li>
+                        <li><strong>图表说明</strong>：运行Python脚本可生成对应的可视化图表，也可使用Excel制作</li>
+                        <li><strong>查重优化</strong>：按照Tab 5的指南逐步优化，可有效降低查重率</li>
+                        <li><strong>对比分析</strong>：Tab 2和Tab 3的对比数据可直接用于论文分析部分</li>
+                        <li><strong>协同效应</strong>：Tab 4的量化数据可作为并购效果的有力证据</li>
+                    </ol>
+                </div>
+                
+                <div class="success-box">
+                    <h4 style="margin-bottom: 15px;">✨ 论文写作建议</h4>
+                    <ul style="margin-left: 20px; line-height: 2;">
+                        <li>✓ 每个结论后面都要有数据支撑</li>
+                        <li>✓ 使用"对比2020年和2024年数据"的表述方式</li>
+                        <li>✓ 图表和表格交替使用，避免全是文字</li>
+                        <li>✓ 理论阐述后立即用安井案例佐证</li>
+                        <li>✓ 对策建议要具体可行，不要空泛</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- 结束标记 -->
+            <div style="text-align: center; padding: 60px 40px; border-top: 3px solid #667eea; margin-top: 60px;">
+                <p style="font-size: 2em; color: #667eea; margin-bottom: 20px; font-weight: bold;">数据分析完毕</p>
+                <p style="font-size: 1.2em; color: #666;">祝论文写作顺利！🎓</p>
+                
+                <div style="margin-top: 30px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                    <a href="index.html" class="nav-btn primary">📚 返回开题报告</a>
+                    <a href="index2.html" class="nav-btn primary">📘 返回毕业论文</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 标签页切换
+        function openTab(evt, tabName) {
+            var i, tabcontent, tabs;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+                tabcontent[i].classList.remove("active");
+            }
+            tabs = document.getElementsByClassName("tab");
+            for (i = 0; i < tabs.length; i++) {
+                tabs[i].className = tabs[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.className += " active";
+        }
+        
+        // 返回顶部
+        window.onscroll = function() {
+            const btn = document.querySelector('.back-to-top');
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                btn.classList.add('show');
+            } else {
+                btn.classList.remove('show');
+            }
+        };
+        
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+    </script>
+</body>
+</html>
