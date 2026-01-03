@@ -1427,16 +1427,24 @@
             });
         });
         
-        // 平滑滚动
+        // 平滑滚动（优化版）
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
+                const targetId = this.getAttribute('href');
+                const target = document.querySelector(targetId);
                 if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
+                    // 计算目标位置，减去100px偏移量，避免被顶部遮挡
+                    const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - 100;
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
                     });
+                    
+                    // 更新URL hash但不触发跳转
+                    if (history.pushState) {
+                        history.pushState(null, null, targetId);
+                    }
                 }
             });
         });
